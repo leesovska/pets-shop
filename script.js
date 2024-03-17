@@ -84,3 +84,49 @@ const items = [
     img: "./img/12.jpeg",
   },
 ];
+
+const template = document.querySelector('#item-template');
+const container = document.querySelector('#shop-items');
+
+items.forEach(item => {
+  const clone = template.content.cloneNode(true);
+
+  clone.querySelector('h1').textContent = item.title;
+  clone.querySelector('p').textContent = item.description;
+  clone.querySelector('.price').textContent = item.price;
+  clone.querySelector('img').src = item.img;
+  clone.querySelector('.tags').textContent = item.tags.join(', ');
+
+  container.append(clone);
+});
+
+const searchBtn = document.querySelector('#search-btn');
+const searchInput = document.querySelector('#search-input');
+const nothingFound = document.querySelector('#nothing-found');
+
+searchBtn.addEventListener('click', function () {
+  const searchLine = searchInput.value.trim().toLowerCase();
+
+  container.innerHTML = '';
+
+  const filteredItems = items.filter(item => item.title.toLowerCase().includes(searchLine));
+  if (filteredItems.length === 0) {
+    nothingFound.textContent = 'Ничего не найдено';
+    return;
+  }
+
+  nothingFound.textContent = '';
+
+
+  filteredItems.forEach(item => {
+    const clone = template.content.cloneNode(true);
+
+    clone.querySelector('h1').textContent = item.title;
+    clone.querySelector('p').textContent = item.description;
+    clone.querySelector('.price').textContent = item.price;
+    clone.querySelector('img').src = item.img;
+    clone.querySelector('.tags').textContent = item.tags.join(', ');
+
+    container.append(clone);
+  });
+});
