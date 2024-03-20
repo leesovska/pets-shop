@@ -95,7 +95,14 @@ items.forEach(item => {
   clone.querySelector('p').textContent = item.description;
   clone.querySelector('.price').textContent = item.price;
   clone.querySelector('img').src = item.img;
-  clone.querySelector('.tags').textContent = item.tags.join(', ');
+
+  const tagsContainer = clone.querySelector('.tags');
+    item.tags.forEach(tag => {
+      const span = document.createElement('span');
+      span.classList.add('tag');
+      span.textContent = tag;
+      tagsContainer.append(span);
+    });
 
   container.append(clone);
 });
