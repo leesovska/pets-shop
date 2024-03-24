@@ -87,29 +87,41 @@ const items = [
 
 const template = document.querySelector('#item-template');
 const container = document.querySelector('#shop-items');
+const nothingFound = document.querySelector('#nothing-found');
 
-items.forEach(item => {
+function prepareShopItem(item) {
+  const { title, description, tags, img, price } = item;
   const clone = template.content.cloneNode(true);
 
-  clone.querySelector('h1').textContent = item.title;
-  clone.querySelector('p').textContent = item.description;
-  clone.querySelector('.price').textContent = item.price;
-  clone.querySelector('img').src = item.img;
+  clone.querySelector('h1').textContent = title;
+  clone.querySelector('p').textContent = description;
+  clone.querySelector('.price').textContent = price;
+  clone.querySelector('img').src = img;
 
   const tagsContainer = clone.querySelector('.tags');
-    item.tags.forEach(tag => {
-      const span = document.createElement('span');
-      span.classList.add('tag');
-      span.textContent = tag;
-      tagsContainer.append(span);
-    });
+  tags.forEach((tag) => {
+    const span = document.createElement('span');
+    span.classList.add('tag');
+    span.textContent = tag;
+    tagsContainer.append(span);
+  });
 
-  container.append(clone);
-});
+  return clone;
+}
+
+function renderItems(items) {
+  container.innerHTML = '';
+  items.forEach(item => {
+    const itemCard = prepareShopItem(item);
+    container.append(itemCard);
+  })
+}
+
+renderItems(items);
 
 const searchBtn = document.querySelector('#search-btn');
 const searchInput = document.querySelector('#search-input');
-const nothingFound = document.querySelector('#nothing-found');
+
 
 searchBtn.addEventListener('click', function () {
   const searchLine = searchInput.value.trim().toLowerCase();
@@ -124,16 +136,5 @@ searchBtn.addEventListener('click', function () {
 
   nothingFound.textContent = '';
 
-
-  filteredItems.forEach(item => {
-    const clone = template.content.cloneNode(true);
-
-    clone.querySelector('h1').textContent = item.title;
-    clone.querySelector('p').textContent = item.description;
-    clone.querySelector('.price').textContent = item.price;
-    clone.querySelector('img').src = item.img;
-    clone.querySelector('.tags').textContent = item.tags.join(', ');
-
-    container.append(clone);
-  });
+  renderItems(filteredItems);
 });
